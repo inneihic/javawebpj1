@@ -5,7 +5,7 @@ COPY . .
 RUN mvn -f JavaPJ1/pom.xml clean package -DskipTests
 
 # Stage 2: Run với Tomcat
-FROM tomcat:9.0-jdk17
+FROM tomcat:11.0.10-jdk17
 COPY --from=builder /app/JavaPJ1/target/JavaPJ1.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
 
