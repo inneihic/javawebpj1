@@ -1,11 +1,13 @@
-# Build stage: đóng gói WAR nếu bạn sử dụng Maven hoặc Ant
-FROM maven:3.8-openjdk-17 AS builder
+# Stage 1: Build WAR bằng Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn -f JavaPJ1/pom.xml clean package -DskipTests
 
-# Run stage: dùng Tomcat để chạy WAR
+# Stage 2: Run với Tomcat
 FROM tomcat:9.0-jdk17
-COPY --from=builder /app/target/JavaPJ1.war /usr/local/tomcat/webapps/ROOT.war
-
+COPY --from=builder /app/JavaPJ1/target/JavaPJ1.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
+
+CMD ["catalina.sh", "run"]
+
